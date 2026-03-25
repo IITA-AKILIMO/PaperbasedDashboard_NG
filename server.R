@@ -5,8 +5,22 @@
 #setwd("C:/Users/User/Documents/ACAI/DASHBOARDS/paper based/PaperbasedDashboard_NG -testSP - feb")
 #setwd("/home/akilimo/projects/PaperbasedDashboard_NG")
 
-# Use Cairo for off-screen rendering on headless servers (no X11 display)
-options(bitmapType = "cairo")
+# Headless server rendering — use Cairo when available, fall back gracefully
+if (requireNamespace("Cairo", quietly = TRUE)) {
+  # Cairo gives proper off-screen PNG/PDF rendering with no X11 display needed
+  Cairo::CairoFonts(
+    regular    = "DejaVu Sans:style=Regular",
+    bold       = "DejaVu Sans:style=Bold",
+    italic     = "DejaVu Sans:style=Oblique",
+    bolditalic = "DejaVu Sans:style=Bold Oblique"
+  )
+  options(bitmapType = "cairo")
+} else {
+  # Best effort without Cairo — may still fail on a display-less server
+  options(bitmapType = "cairo")
+  message("Cairo package not found. Install it with: install.packages('Cairo')")
+  message("On the server run: sudo apt-get install libcairo2-dev  then install.packages('Cairo')")
+}
 
 # Redirect the automatic Rplots.pdf fallback device to tempdir so it doesn't
 # fail when the app working directory isn't writable on the server

@@ -27,6 +27,18 @@ shiny::runApp(".")
 
 - R 4.0 or higher
 
+### Linux / headless server — system libraries
+
+Cairo is required for off-screen rendering (no X11 display). Install before running `install_packages.R`:
+
+```bash
+# Debian / Ubuntu
+sudo apt-get install -y libcairo2-dev libxt-dev
+
+# RHEL / CentOS
+sudo yum install -y cairo-devel libXt-devel
+```
+
 ### Install Packages
 
 **Option 1: Run the installation script (recommended)**

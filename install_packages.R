@@ -22,7 +22,8 @@ core_packages <- c(
   "ggplot2",
   "plotly",
   "qpdf",
-  "gtools"
+  "gtools",
+  "Cairo"
 )
 
 # GIS/Spatial packages
