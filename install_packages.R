@@ -21,7 +21,8 @@ core_packages <- c(
   "tidyr",
   "ggplot2",
   "plotly",
-  "qpdf"
+  "qpdf",
+  "gtools"
 )
 
 # GIS/Spatial packages
