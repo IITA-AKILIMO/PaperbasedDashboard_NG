@@ -1,7 +1,7 @@
 #setwd("C:/Users/User/Documents/ACAI/DASHBOARDS/paper based/PaperbasedDashboard_NG -testSP")
 
 require(gtools)
-library(rgdal)
+library(sf)
 library(raster)
 library(dismo)
 library(rgeos)

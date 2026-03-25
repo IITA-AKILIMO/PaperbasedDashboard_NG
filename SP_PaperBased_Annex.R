@@ -2,7 +2,7 @@
 setwd("C:/Users/User/Documents/ACAI/paper based/PaperbasedDashboard_GH")
 
 require(gtools)
-library(rgdal)
+library(sf)
 library(raster)
 library(dismo)
 library(rgeos)

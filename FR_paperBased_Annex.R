@@ -2,7 +2,7 @@
 library(dplyr)
 library(tidyr)
 require(plyr)
-library(rgdal)
+library(sf)
 library(raster)
 library(dismo)
 library(maptools)
@@ -26,14 +26,14 @@ require(qpdf)
 ## Read the GIS layers
 #######################################################################################
 
-TownsNG <- readOGR(dsn = ".", layer = "Places_towns")
-RiversNG <- readOGR(dsn = ".", layer = "Rivers")
+TownsNG <- st_read(dsn = ".", layer = "Places_towns", quiet = TRUE)
+RiversNG <- st_read(dsn = ".", layer = "Rivers", quiet = TRUE)
 
-boundaryNG <- readOGR(dsn=getwd(), layer="gadm36_NGA_1")
-ngstate <- readOGR(dsn=getwd(), layer="gadm36_NGA_2")
+boundaryNG <- st_read(dsn=getwd(), layer="gadm36_NGA_1")
+ngstate <- st_read(dsn=getwd(), layer="gadm36_NGA_2")
 
-boundaryTZ <- readOGR(dsn=getwd(), layer="gadm36_TZA_1")
-tzRegion <- readOGR(dsn=getwd(), layer="gadm36_TZA_2")
+boundaryTZ <- st_read(dsn=getwd(), layer="gadm36_TZA_1")
+tzRegion <- st_read(dsn=getwd(), layer="gadm36_TZA_2")
 
 
 
@@ -845,8 +845,8 @@ Zanzibarcity <- data.frame(REGION = "Zanzibar",name="Zanzibar", lat=-6.17, lon =
 ##############################################################################################################
 
 setwd("E:/QUEFTS/mtcGISData/Tanzania")
-boundaryTZ <- readOGR(dsn=getwd(), layer="gadm36_TZA_1")
-tzRegion <- readOGR(dsn=getwd(), layer="gadm36_TZA_2")
+boundaryTZ <- st_read(dsn=getwd(), layer="gadm36_TZA_1")
+tzRegion <- st_read(dsn=getwd(), layer="gadm36_TZA_2")
 
 
 LGAMaps_TZ <- function(plantMonth, cities, lgaGroups, LGApoints, stateLabel, textangle, unit, couple){
@@ -1336,8 +1336,8 @@ Voltacity <- data.frame(REGION = c("Volta"),name=c("Ho"),
 ## GH: mapping: for every Region, maps will be made per planting month and based on user selection for ha or acre
 ##############################################################################################################
 setwd("/home/akilimo/lintul/lintul/dataSources/GIS_layers")
-boundaryGH <- readOGR(dsn=getwd(), layer="gha_admbnda_adm1_gss_20210308")
-ghRegion <- readOGR(dsn=getwd(), layer="gha_admbnda_adm2_gss_20210308")
+boundaryGH <- st_read(dsn=getwd(), layer="gha_admbnda_adm1_gss_20210308")
+ghRegion <- st_read(dsn=getwd(), layer="gha_admbnda_adm2_gss_20210308")
 
 
 

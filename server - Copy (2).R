@@ -6,7 +6,7 @@ setwd("C:/Users/User/Documents/ACAI/DASHBOARDS/paper based/PaperbasedDashboard_N
 
 library(tidyr)
 require(plyr)
-library(rgdal)
+library(sf)
 library(raster)
 library(dismo)
 library(maptools)
@@ -496,14 +496,14 @@ server = function(input, output, session) {
 #######################################################################################
 
   
-  TownsNG <- readOGR(dsn = ".", layer = "Places_towns")
+  TownsNG <- st_read(dsn = ".", layer = "Places_towns", quiet = TRUE)
   
-  RiversNG <- readOGR(dsn = ".", layer = "Rivers")
+  RiversNG <- st_read(dsn = ".", layer = "Rivers", quiet = TRUE)
       
-  boundaryNG <- readOGR(dsn=getwd(), layer="gadm36_NGA_1")
+  boundaryNG <- st_read(dsn=getwd(), layer="gadm36_NGA_1")
       
        
-  ngstate <- readOGR(dsn=getwd(), layer="gadm36_NGA_2")
+  ngstate <- st_read(dsn=getwd(), layer="gadm36_NGA_2")
       
       
       ###################################################################################################

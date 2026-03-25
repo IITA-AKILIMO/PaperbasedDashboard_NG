@@ -4,16 +4,16 @@
 ## Read the GIS layers
 #######################################################################################
 
-TownsNG <- readOGR(dsn = ".", layer = "Places_towns")
-RiversNG <- readOGR(dsn = ".", layer = "Rivers")
+TownsNG <- st_read(dsn = ".", layer = "Places_towns", quiet = TRUE)
+RiversNG <- st_read(dsn = ".", layer = "Rivers", quiet = TRUE)
 
 
-boundaryNG <- readOGR(dsn=getwd(), layer="gadm36_NGA_1")
-ngstate <- readOGR(dsn=getwd(), layer="gadm36_NGA_2")
+boundaryNG <- st_read(dsn=getwd(), layer="gadm36_NGA_1")
+ngstate <- st_read(dsn=getwd(), layer="gadm36_NGA_2")
 
 
-boundaryTZ <- readOGR(dsn=getwd(), layer="gadm36_TZA_1")
-tzRegion <- readOGR(dsn=getwd(), layer="gadm36_TZA_2")
+boundaryTZ <- st_read(dsn=getwd(), layer="gadm36_TZA_1")
+tzRegion <- st_read(dsn=getwd(), layer="gadm36_TZA_2")
 
 
 ###################################################################################################

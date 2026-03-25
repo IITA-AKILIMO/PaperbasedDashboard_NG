@@ -8,7 +8,7 @@
 #C:\Users\User\Documents\ACAI\paper based\PaperBasedAnnex - RW
 library(tidyr)
 require(plyr)
-library(rgdal)
+library(sf)
 library(raster)
 library(dismo)
 library(maptools)
@@ -431,29 +431,29 @@ server = function(input, output, session) {
       #######################################################################################
   
  
-      TownsNG <- readOGR(dsn = ".", layer = "Places_towns")
+      TownsNG <- st_read(dsn = ".", layer = "Places_towns", quiet = TRUE)
     
-      RiversNG <- readOGR(dsn = ".", layer = "Rivers")
+      RiversNG <- st_read(dsn = ".", layer = "Rivers", quiet = TRUE)
       
  
-      boundaryNG <- readOGR(dsn=getwd(), layer="gadm36_NGA_1")
+      boundaryNG <- st_read(dsn=getwd(), layer="gadm36_NGA_1")
       
        
-      ngstate <- readOGR(dsn=getwd(), layer="gadm36_NGA_2")
+      ngstate <- st_read(dsn=getwd(), layer="gadm36_NGA_2")
       
     
-      boundaryTZ <- readOGR(dsn=getwd(), layer="gadm36_TZA_1")
+      boundaryTZ <- st_read(dsn=getwd(), layer="gadm36_TZA_1")
       
 
-      tzRegion <- readOGR(dsn=getwd(), layer="gadm36_TZA_2")
+      tzRegion <- st_read(dsn=getwd(), layer="gadm36_TZA_2")
       
-      boundaryRW <- readOGR(dsn=getwd(), layer="gadm36_RWA_1")
+      boundaryRW <- st_read(dsn=getwd(), layer="gadm36_RWA_1")
       
       
-      rwState <- readOGR(dsn=getwd(), layer="gadm36_RWA_2")
+      rwState <- st_read(dsn=getwd(), layer="gadm36_RWA_2")
     
-      boundaryGH <- readOGR(dsn=getwd(), layer="gha_admbnda_adm1_gss_20210308")
-      ghRegions <- readOGR(dsn=getwd(), layer="gha_admbnda_adm2_gss_20210308")
+      boundaryGH <- st_read(dsn=getwd(), layer="gha_admbnda_adm1_gss_20210308")
+      ghRegions <- st_read(dsn=getwd(), layer="gha_admbnda_adm2_gss_20210308")
       
         
       
