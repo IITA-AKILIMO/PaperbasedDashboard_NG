@@ -1,0 +1,31 @@
+# Git
+.git
+.gitignore
+
+# R generated / runtime outputs
+.Rhistory
+.RData
+.Ruserdata
+*.Rproj
+.Rproj.user/
+Rplots.pdf
+maps.pdf
+tables.csv
+
+# Data files — downloaded at build time by setup_data.R
+data/fr/
+data/sp/
+data/gis/
+data/*.pdf
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+
+# Docs
+CLAUDE.md
+CLAUDE.html
+README.html
