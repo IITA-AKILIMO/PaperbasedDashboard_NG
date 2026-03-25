@@ -1147,9 +1147,9 @@ server = function(input, output, session) {
                        
                        sm1 = tm_shape(AOIMap3) +
                          tm_polygons(
-                           col = "Urea",
-                           title = tturea(),
-                           palette = "Greens")
+                           fill = "Urea",
+                           fill.legend = tm_legend(title = tturea()),
+                           fill.scale = tm_scale_ordinal(values = "brewer.greens"))
                        sm1
                        
                        
@@ -1189,10 +1189,10 @@ server = function(input, output, session) {
                       
                        sm2 = tm_shape(AOIMap3) +
                          tm_polygons(
-                           col = "NPK15_15_15",
-                           title = ttnpk(),
+                           fill = "NPK15_15_15",
+                           fill.legend = tm_legend(title = ttnpk()),
                     
-                           palette = "YlOrBr")
+                           fill.scale = tm_scale_ordinal(values = "brewer.yl_or_br"))
             
                          
                       sm2
@@ -1232,11 +1232,11 @@ server = function(input, output, session) {
                        
                        sm3 = tm_shape(AOIMap3) +
                          tm_polygons(
-                           col = "dY",
-                           title = ttha(),
+                           fill = "dY",
+                           fill.legend = tm_legend(title = ttha()),
                            #breaks = c(3, 4, 5, 6),
                            #labels = c("Low", "Medium", "High"),
-                           palette = "YlGnBu")
+                           fill.scale = tm_scale_ordinal(values = "brewer.yl_gn_bu"))
                        
                        
                        
@@ -1299,13 +1299,13 @@ server = function(input, output, session) {
                            
                            sm1 = tm_shape(AOIMap3) +
                              tm_polygons(
-                               col = "Urea",
-                               title = tturea(),
+                               fill = "Urea",
+                               fill.legend = tm_legend(title = tturea()),
                            
                                
                                #breaks = c(200, 175, 150, 125,100),
                                # labels = c("Low", "Medium", "High"),
-                               palette = "Greens")+
+                               fill.scale = tm_scale_ordinal(values = "brewer.greens"))+
                              tm_legend(position = c("right", "top"))
                            sm1
                            
@@ -1340,9 +1340,9 @@ server = function(input, output, session) {
                            
                            sm2 = tm_shape(AOIMap3) +
                              tm_polygons(
-                               col = "NPK15_15_15",
-                               title = ttnpk(),
-                               palette = "Oranges")
+                               fill = "NPK15_15_15",
+                               fill.legend = tm_legend(title = ttnpk()),
+                               fill.scale = tm_scale_ordinal(values = "brewer.oranges"))
                          
                            sm2
                            
@@ -1378,11 +1378,11 @@ server = function(input, output, session) {
                            
                            sm3 = tm_shape(AOIMap3) +
                              tm_polygons(
-                               col = "dY",
-                               title = ttha(),
+                               fill = "dY",
+                               fill.legend = tm_legend(title = ttha()),
                                #breaks = c(3, 4, 5, 6),
                                #labels = c("Low", "Medium", "High"),
-                               palette = "YlGnBu")
+                               fill.scale = tm_scale_ordinal(values = "brewer.yl_gn_bu"))
                            
                            sm3
                            
