@@ -7,16 +7,30 @@ Agricultural decision support tool for cassava farmers in Nigeria, Tanzania, Rwa
 - **Fertilizer Recommendation** - Provides fertilizer application rates (Urea, NPK) by Local Government Area (LGA) and planting month, with expected yield responses
 - **Scheduled Planting** - Provides expected yield for different planting and harvest schedules
 
+## Quick Start
+
+```r
+# 1. Clone the repository
+# git clone git@github.com:IITA-AKILIMO/PaperbasedDashboard_NG.git
+
+# 2. Install R packages
+source("install_packages.R")
+
+# 3. Download data files
+source("setup_data.R")
+
+# 4. Run the app
+shiny::runApp(".")
+```
+
 ## Prerequisites
 
-### R Version
-- R 4.0 or higher recommended
+- R 4.0 or higher
 
 ### Install Packages
 
 **Option 1: Run the installation script (recommended)**
 ```r
-# From R/RStudio
 source("install_packages.R")
 ```
 
@@ -28,19 +42,40 @@ install.packages(c(
   "sf", "raster", "tmap", "leaflet", "ggspatial", "spData", "cartogram", "rasterVis",
   "viridis", "RColorBrewer", "gridExtra", "ggthemes", "ggrepel", "hexbin",
   "formattable", "shinyalert", "shinybusy", "shinycssloaders", "shinyjs",
-  "plyr", "grid", "tools"
+  "plyr", "grid", "tools", "qpdf"
 ))
 ```
+
+## Data Setup
+
+Data files (RDS, shapefiles, CSVs) are not tracked in git. Download them from the [GitHub Release](https://github.com/IITA-AKILIMO/PaperbasedDashboard_NG/releases/tag/v1.0.0) by running:
+
+```r
+source("setup_data.R")
+```
+
+This downloads all required files into the correct `data/` subfolders. It is safe to re-run — existing files are skipped.
+
+### What gets downloaded
+
+| Folder | Contents |
+|---|---|
+| `data/fr/ng/` | Nigeria fertilizer recommendation RDS files (levels 1–5) |
+| `data/fr/tz/` | Tanzania fertilizer recommendation RDS files (levels 1–5) |
+| `data/fr/rw/` | Rwanda fertilizer recommendation RDS and CSV |
+| `data/sp/ng/` | Nigeria scheduled planting RDS and CSV files |
+| `data/gis/ng/` | Nigeria boundary, towns, and rivers shapefiles |
+| `data/gis/world/` | World borders shapefile |
+| `data/` | User guide PDFs (Nigeria and Tanzania, acre and hectare) |
+
+> GIS data for Tanzania, Rwanda, and Ghana (`data/gis/tz/`, `data/gis/rw/`, `data/gis/gh/`) and Ghana fertilizer data (`data/fr/gh/`) must be added manually — contact the project team for these files.
 
 ## Running the Application
 
 ### From R/RStudio
 
 ```r
-# Navigate to the project directory
 setwd("path/to/PaperbasedDashboard_NG")
-
-# Run the app
 shiny::runApp(".")
 
 # Or specify port
@@ -53,22 +88,6 @@ shiny::runApp(".", port = 5050)
 R -e "shiny::runApp('.')"
 ```
 
-## Data Files Required
-
-The application requires the following files in the working directory:
-
-### GIS Shapefiles
-- `gadm36_NGA_1.shp`, `gadm36_NGA_2.shp` - Nigeria boundaries
-- `gadm36_TZA_1.shp`, `gadm36_TZA_2.shp` - Tanzania boundaries
-- `gadm36_RWA_1.shp`, `gadm36_RWA_2.shp` - Rwanda boundaries
-- `gadm36_GHA_1.shp`, `gadm36_GHA_2.shp` - Ghana boundaries
-- `Places_towns.shp` - Town/city locations
-- `Rivers.shp` - River features
-
-### RDS Data Files
-- `FRrecom_lga_level1_NG_2020.RDS` through `FRrecom_lga_level5_NG_2020.RDS` - Nigeria fertilizer recommendations
-- `FRrecom_lga_level1_TZ_2020.RDS` through `FRrecom_lga_level5_TZ_2020.RDS` - Tanzania fertilizer recommendations
-
 ## Country-Specific Fertilizer Types
 
 - **Nigeria**: Urea, NPK 15:15:15
@@ -78,22 +97,28 @@ The application requires the following files in the working directory:
 
 ```
 PaperbasedDashboard_NG/
-├── server.R              # Main Shiny server
-├── ui.R                  # Shiny UI definition
-├── functions.R           # Utility functions
-├── functionspp.R         # GIS processing functions
-├── SP_functions.R        # Scheduled Planting functions
-├── install_packages.R    # Package installation script
-├── styles.css            # Custom styling
-├── README.md             # This file
-└── SP/                   # Scheduled Planting submodule
+├── server.R                  # Main Shiny server
+├── ui.R                      # Shiny UI definition
+├── functions.R               # Utility functions
+├── functionspp.R             # GIS processing functions
+├── SP_functions.R            # Scheduled Planting functions
+├── FR_paperBased_Annex.R     # Fertilizer recommendation annex
+├── SP_PaperBased_Annex.R     # Scheduled planting annex
+├── install_packages.R        # Package installation script
+├── setup_data.R              # Data file download script
+├── styles.css                # Custom styling
+├── SP/                       # Scheduled Planting submodule
+└── data/                     # Data files (gitignored — run setup_data.R)
+    ├── fr/                   # Fertilizer recommendation data
+    ├── sp/                   # Scheduled planting data
+    └── gis/                  # GIS shapefiles
 ```
 
 ## Development
 
 ### Package Migration Note
 
-This project was migrated from the deprecated `rgdal` package to `sf`. The migration was completed in March 2026.
+This project was migrated from the deprecated `rgdal`, `sp`, `rgeos`, `dismo`, and `maptools` packages to `sf`. Migration was completed in March 2026.
 
 ## License
 
