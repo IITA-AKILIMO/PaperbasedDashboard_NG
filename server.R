@@ -1125,8 +1125,7 @@ server = function(input, output, session) {
                          tm_polygons(
                            col = "Urea",
                            title = tturea(),
-                           palette = "Greens")+
-                         tm_text(text = "NAME_2")
+                           palette = "Greens")
                        sm1
                        
                        
@@ -1169,10 +1168,10 @@ server = function(input, output, session) {
                            col = "NPK15_15_15",
                            title = ttnpk(),
                     
-                           palette = "YlOrBr")+
-                         tm_text(text = "NAME_2")
+                           palette = "YlOrBr")
             
                          
+                      sm2
                      })
                    })
       
@@ -1213,11 +1212,11 @@ server = function(input, output, session) {
                            title = ttha(),
                            #breaks = c(3, 4, 5, 6),
                            #labels = c("Low", "Medium", "High"),
-                           palette = "YlGnBu")+
-                         tm_text(text = "NAME_2")
+                           palette = "YlGnBu")
                        
                        
                        
+                      sm3
                      })
                    })
       
@@ -1283,8 +1282,7 @@ server = function(input, output, session) {
                                #breaks = c(200, 175, 150, 125,100),
                                # labels = c("Low", "Medium", "High"),
                                palette = "Greens")+
-                             tm_legend(legend.position = c("right", "top"))+
-                             tm_text(text = "NAME_2")
+                             tm_legend(position = c("right", "top"))
                            sm1
                            
                            
@@ -1320,8 +1318,7 @@ server = function(input, output, session) {
                              tm_polygons(
                                col = "NPK15_15_15",
                                title = ttnpk(),
-                               palette = "Oranges")+
-                             tm_text(text = "NAME_2")
+                               palette = "Oranges")
                          
                            sm2
                            
@@ -1361,8 +1358,7 @@ server = function(input, output, session) {
                                title = ttha(),
                                #breaks = c(3, 4, 5, 6),
                                #labels = c("Low", "Medium", "High"),
-                               palette = "YlGnBu")+
-                             tm_text(text = "NAME_2")
+                               palette = "YlGnBu")
                            
                            sm3
                            
