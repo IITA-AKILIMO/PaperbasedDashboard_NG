@@ -61,15 +61,13 @@ LGAMaps <- function(plantMonth, cities, lgaGroups, LGApoints, stateLabel, textan
     plotData$dY <- round(plotData$LGAdY/1)*1
   }
   
-  fileNameCsv <- paste(plantMonth, "_", paste(lgaGroups, collapse="_"), ".csv", sep="")
-  
   AOIMap2 <- merge(AOIMap, unique(plotData[, c("LGA", "Urea", "NPK15_15_15","dY", "LGAdY")]),by.x="NAME_2" ,by.y="LGA")
   AOIMap2$month <- plantMonth
   AOIMap2 <- AOIMap2[!is.na(AOIMap2$Urea), ]
   plotData$month <- plantMonth
   tt <- unique(as.data.frame(plotData[, c("STATE","LGA", "Urea", "NPK15_15_15", "LGAdY", "month")]))
   tt <- tt[order(tt$STATE, tt$LGA), ]
-  write.csv(tt, fileNameCsv, row.names = FALSE)
+  write.csv(tt, file.path(tempdir(), "tables.csv"), row.names = FALSE)
   
   AOIMap3 <- st_as_sf(AOIMap2)
   

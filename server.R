@@ -5,6 +5,9 @@
 #setwd("C:/Users/User/Documents/ACAI/DASHBOARDS/paper based/PaperbasedDashboard_NG -testSP - feb")
 #setwd("/home/akilimo/projects/PaperbasedDashboard_NG")
 
+# Use Cairo for off-screen rendering on headless servers (no X11 display)
+options(bitmapType = "cairo")
+
 library(tidyr)
 require(plyr)
 library(sf)
@@ -932,9 +935,6 @@ server = function(input, output, session) {
         plotData$dY <- round(plotData$LGAdY/1)*1
       }
       
-      #csv tables naming
-      fileNameCsv <- paste("tables", ".csv", sep="")
-      
       AOIMap2 <- merge(AOIMap, unique(plotData[, c("LGA", "Urea", "NPK15_15_15","dY", "LGAdY")]),by.x="NAME_2" ,by.y="LGA")
       AOIMap2$month <- plantMonth
       AOIMap2 <- AOIMap2[!is.na(AOIMap2$Urea), ]
@@ -1485,7 +1485,7 @@ server = function(input, output, session) {
         
         
         #put the maps together in pdf format
-        fileName <- paste("maps", ".pdf", sep="")
+        fileName <- file.path(tempdir(), "maps.pdf")
         pdf(fileName, onefile = TRUE, height = 14, width=12)
         #pdf.options(paper = "a4")
         grid.newpage()
@@ -1552,7 +1552,7 @@ server = function(input, output, session) {
         },
         
         content <- function(file) {
-          file.copy("maps.pdf", file)
+          file.copy(file.path(tempdir(), "maps.pdf"), file)
         },
         contentType = "application/pdf"
       )
@@ -1564,7 +1564,7 @@ server = function(input, output, session) {
         },
         
         content <- function(file) {
-          file.copy("tables.csv", file)
+          file.copy(file.path(tempdir(), "tables.csv"), file)
         },
         contentType = "application/csv"
       )
