@@ -4,8 +4,8 @@
 ## Read the GIS layers
 #######################################################################################
 
-TownsNG <- st_read(dsn = ".", layer = "Places_towns", quiet = TRUE)
-RiversNG <- st_read(dsn = ".", layer = "Rivers", quiet = TRUE)
+TownsNG <- st_read(dsn = ".", layer = "Places_towns")
+RiversNG <- st_read(dsn = ".", layer = "Rivers")
 
 
 boundaryNG <- st_read(dsn=getwd(), layer="gadm36_NGA_1")

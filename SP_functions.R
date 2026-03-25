@@ -3,8 +3,6 @@
 require(gtools)
 library(sf)
 library(raster)
-library(dismo)
-library(rgeos)
 library(ggspatial)
 require(plyr)
 library(gtable)

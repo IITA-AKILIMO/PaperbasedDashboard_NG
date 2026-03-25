@@ -1,12 +1,9 @@
-setwd("C:/Users/User/Documents/ACAI/paper based/PaperbasedDashboard_GH")
 source("SP_functions.R")
 
 
 require(gtools)
 library(sf)
 library(raster)
-library(dismo)
-library(rgeos)
 library(ggspatial)
 require(plyr)
 library(gtable)
@@ -15,32 +12,21 @@ require(qpdf)
 library(grid)
 require(tidyr)
 
-require(plyr)
-
-
-
-library(maptools)
-
 require(RColorBrewer)
 require(graphics)
 require(rasterVis)
-library(sp)
 library(shinyalert)
 library(ggthemes)
 require(ggplot2)
-library(gridExtra) 
+library(gridExtra)
 library(hexbin)
 library(viridis)
-library(sf)
-library(ggspatial)
 
 require(ggrepel)
 library(shiny)
 library(shinyWidgets)
 library(shinythemes)
 library(plotly)
-library(sf)
-library(raster)
 library(dplyr)
 library(spData)
 library(tmap)
@@ -56,9 +42,9 @@ library(DT)
 #######################################################################################
 
 
-TownsNG <- st_read(dsn = ".", layer = "Places_towns", quiet = TRUE)
+TownsNG <- st_read(dsn = ".", layer = "Places_towns")
 
-RiversNG <- st_read(dsn = ".", layer = "Rivers", quiet = TRUE)
+RiversNG <- st_read(dsn = ".", layer = "Rivers")
 
 
 boundaryNG <- st_read(dsn=getwd(), layer="gadm36_NGA_1")

@@ -1,11 +1,7 @@
 
-setwd("C:/Users/User/Documents/ACAI/paper based/PaperbasedDashboard_GH")
-
 require(gtools)
 library(sf)
 library(raster)
-library(dismo)
-library(rgeos)
 library(ggspatial)
 require(plyr)
 library(gtable)

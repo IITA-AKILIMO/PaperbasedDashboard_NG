@@ -4,19 +4,14 @@ library(tidyr)
 require(plyr)
 library(sf)
 library(raster)
-library(dismo)
-library(maptools)
-library(rgeos)
 require(RColorBrewer)
 require(graphics)
 require(rasterVis)
-require(sp)
 library(ggthemes)
 require(ggplot2)
-library(gridExtra) 
+library(gridExtra)
 library(hexbin)
 library(viridis)
-library(sf)
 library(ggspatial)
 library(grid)
 require(qpdf)
@@ -26,8 +21,8 @@ require(qpdf)
 ## Read the GIS layers
 #######################################################################################
 
-TownsNG <- st_read(dsn = ".", layer = "Places_towns", quiet = TRUE)
-RiversNG <- st_read(dsn = ".", layer = "Rivers", quiet = TRUE)
+TownsNG <- st_read(dsn = ".", layer = "Places_towns")
+RiversNG <- st_read(dsn = ".", layer = "Rivers")
 
 boundaryNG <- st_read(dsn=getwd(), layer="gadm36_NGA_1")
 ngstate <- st_read(dsn=getwd(), layer="gadm36_NGA_2")
@@ -41,8 +36,8 @@ tzRegion <- st_read(dsn=getwd(), layer="gadm36_TZA_2")
 ###################################################################################################
 ## NG fertilizer recom for FCY 1:5
 ###################################################################################################
-FR_NG_FCY1 <- readRDS("/home/akilimo/projects/PaperbasedDashboard_v2/FRrecom_lga_level1_NG_2020.RDS")
-FR_NG_FCY2 <- readRDS("/home/akilimo/projects/PaperbasedDashboard_v2/FRrecom_lga_level2_NG_2020.RDS")
+FR_NG_FCY1 <- readRDS("FRrecom_lga_level1_NG_2020.RDS")
+FR_NG_FCY2 <- readRDS("FRrecom_lga_level2_NG_2020.RDS")
 FR_NG_FCY3 <- readRDS("FRrecom_lga_level3_NG_2020.RDS")
 FR_NG_FCY4 <- readRDS("FRrecom_lga_level4_NG_2020.RDS")
 FR_NG_FCY5 <- readRDS("FRrecom_lga_level5_NG_2020.RDS")
@@ -62,7 +57,7 @@ FR_TZ_FCY5 <- readRDS("FRrecom_lga_level5_TZ_2020.RDS")
 ###########################################################################
 ##  Ghana fertilizer recom for FCY 1:5
 ###########################################################################
-FCY_FRData <- readRDS("/home/akilimo/projects/PaperbasedDashboard_v2/GH_FR_CassavaPaperBased.RDS") 
+FCY_FRData <- readRDS("GH_FR_CassavaPaperBased.RDS")
 
 FR_GH_FCY1 <- FCY_FRData[FCY_FRData$FCY == "level1", ]
 FR_GH_FCY2 <- FCY_FRData[FCY_FRData$FCY == "level2", ]
@@ -258,17 +253,16 @@ LGAMaps <- function(plantMonth, cities, lgaGroups, LGApoints, stateLabel, textan
   
   AOIMap <- subset(ngstate, NAME_1 %in% AOI )
   AOIMap <- AOIMap[,c("NAME_1", "NAME_2")]
-  LGAnames <- as.data.frame(AOIMap)
-  LGAnames <- cbind(LGAnames, coordinates(AOIMap))
+  LGAnames <- as.data.frame(sf::st_drop_geometry(AOIMap))
+  LGAnames <- cbind(LGAnames, sf::st_coordinates(sf::st_centroid(sf::st_geometry(AOIMap))))
   colnames(LGAnames) <- c("STATE","LGA","long","lat"  )
   LGAnames <- LGAnames[!LGAnames$LGA %in% c("IbadanNorth-West","IbadanNorth-East","IbadanSouth-West", "IbadanSouth-East"),]
   LGAnames$LGA <- gsub("Egbado /", "", LGAnames$LGA )
   
   
   crop_ngstate <- subset(ngstate, NAME_1 %in% AOI )
-  towns <- as.data.frame(TownsNG)
-  towns <- towns[towns$name %in% cities & towns$fclass %in% c("town", "city"),]
-  crop_RiversNG <-  crop(RiversNG, extent(crop_ngstate))
+  towns <- TownsNG[TownsNG$name %in% cities & TownsNG$fclass %in% c("town", "city"),]
+  crop_RiversNG <- sf::st_crop(RiversNG, sf::st_bbox(crop_ngstate))
   crop_RiversNG <- crop_RiversNG[crop_RiversNG$fclass == "river", ]
   
 
@@ -331,13 +325,13 @@ LGAMaps <- function(plantMonth, cities, lgaGroups, LGApoints, stateLabel, textan
   ggUrea <- ggplot(AOIMap3) +
     geom_sf(aes(fill=Urea), col="grey30") +
     scale_fill_manual(values = ureacols, guide = guide_legend(reverse=TRUE))+
-    geom_path(data=crop_ngstate, aes(x=long, y=lat, group=group), size=0.5) +
-    geom_path(data=AOIMapS, aes(x=long, y=lat, group=group), size=1, col="darkgrey") +
+    geom_sf(data=crop_ngstate, fill=NA, linewidth=0.5) +
+    geom_sf(data=AOIMapS, fill=NA, linewidth=1, col="darkgrey") +
     #geom_text(data=LGAnames, aes(long, lat, label=LGA, fontface=1, angle=textangle), size=3) +
     geom_text_repel(data=LGAnames, aes(long, lat, label=LGA, fontface=1, angle=textangle), size=3, segment.size = NA) + 
     geom_text(data=stateLabel, aes(lon, lat, label=state, fontface=2), col='black', size=6)+
-    geom_path(data=crop_RiversNG, aes(x=long, y=lat, group=group), color="dodgerblue1", size=0.3) +
-    geom_point(data=towns, aes(x=coords.x1, y=coords.x2), shape=16,  size=3) +
+    geom_sf(data=crop_RiversNG, color="dodgerblue1", linewidth=0.3) +
+    geom_sf(data=towns, shape=16, size=3) +
     annotation_scale(location = "br", width_hint = 0.3, line_width = 0.4) +
     annotation_north_arrow(location = "br", which_north = "true", pad_x = unit(0.2, "in"), pad_y = unit(0.2, "in"),
                            style = north_arrow_fancy_orienteering) +
@@ -373,13 +367,13 @@ LGAMaps <- function(plantMonth, cities, lgaGroups, LGApoints, stateLabel, textan
   ggNPK <- ggplot(AOIMap3) +
     geom_sf(aes(fill=NPK15_15_15), col="grey30") +
     scale_fill_manual(values = NPKcols, guide = guide_legend(reverse=TRUE))+
-    geom_path(data=crop_ngstate, aes(x=long, y=lat, group=group), size=0.5) +
-    geom_path(data=AOIMapS, aes(x=long, y=lat, group=group), size=1, col="darkgrey") +
+    geom_sf(data=crop_ngstate, fill=NA, linewidth=0.5) +
+    geom_sf(data=AOIMapS, fill=NA, linewidth=1, col="darkgrey") +
     geom_text_repel(data=LGAnames, aes(long, lat, label=LGA, fontface=1, angle=textangle), size=3, segment.size = NA) + 
     # geom_text(data=LGAnames, aes(long, lat, label=LGA, fontface=1, angle=textangle), size=2.5)+
     #geom_text_repel(data=LGAnames, aes(long, lat, label=LGA, fontface=1, angle=textangle), size=3) + 
-    geom_path(data=crop_RiversNG, aes(x=long, y=lat, group=group), color="dodgerblue1", size=0.3) +
-    geom_point(data=towns, aes(x=coords.x1, y=coords.x2), shape=16,  size=3) +
+    geom_sf(data=crop_RiversNG, color="dodgerblue1", linewidth=0.3) +
+    geom_sf(data=towns, shape=16, size=3) +
     xlab("") + ylab("") +
     ggtitle(tt) +
     theme_bw() +
@@ -408,13 +402,13 @@ LGAMaps <- function(plantMonth, cities, lgaGroups, LGApoints, stateLabel, textan
   ggYield <- ggplot(AOIMap3) +
     geom_sf(aes(fill=dY), col="grey30") +
     scale_fill_manual(values = Ydcols, guide = guide_legend(reverse=TRUE))+
-    geom_path(data=crop_ngstate, aes(x=long, y=lat, group=group), size=0.5) +
-    geom_path(data=AOIMapS, aes(x=long, y=lat, group=group), size=1, col="darkgrey") +
+    geom_sf(data=crop_ngstate, fill=NA, linewidth=0.5) +
+    geom_sf(data=AOIMapS, fill=NA, linewidth=1, col="darkgrey") +
     geom_text_repel(data=LGAnames, aes(long, lat, label=LGA, fontface=1, angle=textangle), size=3, segment.size = NA) + 
     #geom_text(data=LGAnames, aes(long, lat, label=LGA, fontface=1, angle=textangle), size=2.5)+
     #geom_text_repel(data=LGAnames, aes(long, lat, label=LGA, fontface=1, angle=textangle), size=3) + 
-    geom_path(data=crop_RiversNG, aes(x=long, y=lat, group=group), color="dodgerblue1", size=0.3) +
-    geom_point(data=towns, aes(x=coords.x1, y=coords.x2), shape=16,  size=3) +
+    geom_sf(data=crop_RiversNG, color="dodgerblue1", linewidth=0.3) +
+    geom_sf(data=towns, shape=16, size=3) +
     xlab("") + ylab("") +
     ggtitle(tt) +
     theme_bw() +
@@ -867,8 +861,8 @@ LGAMaps_TZ <- function(plantMonth, cities, lgaGroups, LGApoints, stateLabel, tex
   
   AOIMap <- subset(tzRegion, NAME_1 %in% AOI )
   AOIMap <- AOIMap[,c("NAME_1", "NAME_2")]
-  LGAnames <- as.data.frame(AOIMap)
-  LGAnames <- cbind(LGAnames, coordinates(AOIMap))
+  LGAnames <- as.data.frame(sf::st_drop_geometry(AOIMap))
+  LGAnames <- cbind(LGAnames, sf::st_coordinates(sf::st_centroid(sf::st_geometry(AOIMap))))
   colnames(LGAnames) <- c("REGION","DISTRICT","long","lat"  )
   crop_ngstate <- subset(tzRegion, NAME_1 %in% AOI )
   
@@ -936,8 +930,8 @@ LGAMaps_TZ <- function(plantMonth, cities, lgaGroups, LGApoints, stateLabel, tex
   ggUrea <- ggplot(AOIMap3) +
     geom_sf(aes(fill=Urea), col="darkgrey") +
     scale_fill_manual(values = ureacols, guide = guide_legend(reverse=TRUE))+
-    geom_path(data=crop_ngstate, aes(x=long, y=lat, group=group), size=0.5) +
-    geom_path(data=AOIMapS, aes(x=long, y=lat, group=group), size=1, col="darkgrey") +
+    geom_sf(data=crop_ngstate, fill=NA, linewidth=0.5) +
+    geom_sf(data=AOIMapS, fill=NA, linewidth=1, col="darkgrey") +
     geom_text_repel(data=LGAnames, aes(long, lat, label=DISTRICT, fontface=1, angle=textangle), size=4, segment.size = NA) + 
     geom_text(data=stateLabel, aes(lon, lat, label=REGION, fontface=2), col='black', size=6)+
     geom_point(data=cities, aes(x=lon, y=lat), shape=16,  size=3) +
@@ -976,8 +970,8 @@ LGAMaps_TZ <- function(plantMonth, cities, lgaGroups, LGApoints, stateLabel, tex
     geom_sf(aes(fill=NPK17_17_17), col="darkgrey") +
     
     scale_fill_manual(values = NPKcols, guide = guide_legend(reverse=TRUE))+
-    geom_path(data=crop_ngstate, aes(x=long, y=lat, group=group), size=0.5) +
-    geom_path(data=AOIMapS, aes(x=long, y=lat, group=group), size=1, col="darkgrey") +
+    geom_sf(data=crop_ngstate, fill=NA, linewidth=0.5) +
+    geom_sf(data=AOIMapS, fill=NA, linewidth=1, col="darkgrey") +
     geom_text_repel(data=LGAnames, aes(long, lat, label=DISTRICT, fontface=1, angle=textangle), size=4, segment.size = NA) + 
     # geom_text(data=LGAnames, aes(long, lat, label=LGA, fontface=1, angle=textangle), size=2.5)+
     #geom_text_repel(data=LGAnames, aes(long, lat, label=LGA, fontface=1, angle=textangle), size=3) + 
@@ -1011,8 +1005,8 @@ LGAMaps_TZ <- function(plantMonth, cities, lgaGroups, LGApoints, stateLabel, tex
     geom_sf(aes(fill=DAP), col="darkgrey") +
     
     scale_fill_manual(values = DAPcols, guide = guide_legend(reverse=TRUE))+
-    geom_path(data=crop_ngstate, aes(x=long, y=lat, group=group), size=0.5) +
-    geom_path(data=AOIMapS, aes(x=long, y=lat, group=group), size=1, col="darkgrey") +
+    geom_sf(data=crop_ngstate, fill=NA, linewidth=0.5) +
+    geom_sf(data=AOIMapS, fill=NA, linewidth=1, col="darkgrey") +
     geom_text_repel(data=LGAnames, aes(long, lat, label=DISTRICT, fontface=1, angle=textangle), size=4, segment.size = NA) +
     geom_point(data=cities, aes(x=lon, y=lat), shape=16,  size=3) +
     xlab("") + ylab("") +
@@ -1045,8 +1039,8 @@ LGAMaps_TZ <- function(plantMonth, cities, lgaGroups, LGApoints, stateLabel, tex
     geom_sf(aes(fill=dY), col="darkgrey") +
     
     scale_fill_manual(values = Ydcols, guide = guide_legend(reverse=TRUE))+
-    geom_path(data=crop_ngstate, aes(x=long, y=lat, group=group), size=0.5) +
-    geom_path(data=AOIMapS, aes(x=long, y=lat, group=group), size=1, col="darkgrey") +
+    geom_sf(data=crop_ngstate, fill=NA, linewidth=0.5) +
+    geom_sf(data=AOIMapS, fill=NA, linewidth=1, col="darkgrey") +
     geom_text_repel(data=LGAnames, aes(long, lat, label=DISTRICT, fontface=1, angle=textangle), size=4, segment.size = NA) + 
     #geom_text(data=LGAnames, aes(long, lat, label=LGA, fontface=1, angle=textangle), size=2.5)+
     #geom_text_repel(data=LGAnames, aes(long, lat, label=LGA, fontface=1, angle=textangle), size=3) + 
@@ -1360,8 +1354,8 @@ LGAMaps_GH <- function(plantMonth, cities, lgaGroups, LGApoints, stateLabel, tex
   
   AOIMap <- subset(ghRegion, ADM1_EN %in% AOI )
   AOIMap <- AOIMap[,c("ADM1_EN", "ADM2_EN")]
-  LGAnames <- as.data.frame(AOIMap)
-  LGAnames <- cbind(LGAnames, coordinates(AOIMap))
+  LGAnames <- as.data.frame(sf::st_drop_geometry(AOIMap))
+  LGAnames <- cbind(LGAnames, sf::st_coordinates(sf::st_centroid(sf::st_geometry(AOIMap))))
   colnames(LGAnames) <- c("REGION","DISTRICT","long","lat")
   crop_ngstate <- subset(ghRegion, ADM1_EN %in% AOI )
   
@@ -1450,8 +1444,8 @@ LGAMaps_GH <- function(plantMonth, cities, lgaGroups, LGApoints, stateLabel, tex
     ggUrea <- ggplot(AOIMap3) +
       geom_sf(aes(fill=Urea), col="darkgrey") +
       scale_fill_manual(values = ureacols, guide = guide_legend(reverse=TRUE))+
-      geom_path(data=crop_ngstate, aes(x=long, y=lat, group=group), size=0.5) +
-      geom_path(data=AOIMapS, aes(x=long, y=lat, group=group), size=1, col="darkgrey") +
+      geom_sf(data=crop_ngstate, fill=NA, linewidth=0.5) +
+      geom_sf(data=AOIMapS, fill=NA, linewidth=1, col="darkgrey") +
       geom_text_repel(data=LGAnames, aes(long, lat, label=DISTRICT, fontface=1, angle=textangle), size=2, segment.size = NA) + 
       geom_text(data=stateLabel, aes(lon, lat, label=REGION, fontface=2), col='black', size=6)+
       geom_point(data=cities, aes(x=lon, y=lat), shape=16,  size=3) +
@@ -1496,8 +1490,8 @@ LGAMaps_GH <- function(plantMonth, cities, lgaGroups, LGApoints, stateLabel, tex
       geom_sf(aes(fill=NPK152020), col="darkgrey") +
       
       scale_fill_manual(values = NPKcols, guide = guide_legend(reverse=TRUE))+
-      geom_path(data=crop_ngstate, aes(x=long, y=lat, group=group), size=0.5) +
-      geom_path(data=AOIMapS, aes(x=long, y=lat, group=group), size=1, col="darkgrey") +
+      geom_sf(data=crop_ngstate, fill=NA, linewidth=0.5) +
+      geom_sf(data=AOIMapS, fill=NA, linewidth=1, col="darkgrey") +
       geom_text_repel(data=LGAnames, aes(long, lat, label=DISTRICT, fontface=1, angle=textangle), size=2, segment.size = NA) + 
       # geom_text(data=LGAnames, aes(long, lat, label=LGA, fontface=1, angle=textangle), size=2.5)+
       #geom_text_repel(data=LGAnames, aes(long, lat, label=LGA, fontface=1, angle=textangle), size=3) + 
@@ -1535,8 +1529,8 @@ LGAMaps_GH <- function(plantMonth, cities, lgaGroups, LGApoints, stateLabel, tex
       geom_sf(aes(fill=NPK123017), col="darkgrey") +
       
       scale_fill_manual(values = NPK123017cols, guide = guide_legend(reverse=TRUE))+
-      geom_path(data=crop_ngstate, aes(x=long, y=lat, group=group), size=0.5) +
-      geom_path(data=AOIMapS, aes(x=long, y=lat, group=group), size=1, col="darkgrey") +
+      geom_sf(data=crop_ngstate, fill=NA, linewidth=0.5) +
+      geom_sf(data=AOIMapS, fill=NA, linewidth=1, col="darkgrey") +
       geom_text_repel(data=LGAnames, aes(long, lat, label=DISTRICT, fontface=1, angle=textangle), size=2, segment.size = NA) +
       geom_point(data=cities, aes(x=lon, y=lat), shape=16,  size=3) +
       xlab("") + ylab("") +
@@ -1572,8 +1566,8 @@ LGAMaps_GH <- function(plantMonth, cities, lgaGroups, LGApoints, stateLabel, tex
     ggNPK112221 <- ggplot(AOIMap3) +
       geom_sf(aes(fill=NPK112221), col="darkgrey") +
       scale_fill_manual(values = NPK112221cols, guide = guide_legend(reverse=TRUE))+
-      geom_path(data=crop_ngstate, aes(x=long, y=lat, group=group), size=0.5) +
-      geom_path(data=AOIMapS, aes(x=long, y=lat, group=group), size=1, col="darkgrey") +
+      geom_sf(data=crop_ngstate, fill=NA, linewidth=0.5) +
+      geom_sf(data=AOIMapS, fill=NA, linewidth=1, col="darkgrey") +
       geom_text_repel(data=LGAnames, aes(long, lat, label=DISTRICT, fontface=1, angle=textangle), size=2, segment.size = NA) +
       geom_point(data=cities, aes(x=lon, y=lat), shape=16,  size=3) +
       xlab("") + ylab("") +
@@ -1609,8 +1603,8 @@ LGAMaps_GH <- function(plantMonth, cities, lgaGroups, LGApoints, stateLabel, tex
     ggNPK251010 <- ggplot(AOIMap3) +
       geom_sf(aes(fill=NPK251010), col="darkgrey") +
       scale_fill_manual(values = NPK251010cols, guide = guide_legend(reverse=TRUE))+
-      geom_path(data=crop_ngstate, aes(x=long, y=lat, group=group), size=0.5) +
-      geom_path(data=AOIMapS, aes(x=long, y=lat, group=group), size=1, col="darkgrey") +
+      geom_sf(data=crop_ngstate, fill=NA, linewidth=0.5) +
+      geom_sf(data=AOIMapS, fill=NA, linewidth=1, col="darkgrey") +
       geom_text_repel(data=LGAnames, aes(long, lat, label=DISTRICT, fontface=1, angle=textangle), size=4, segment.size = NA) +
       geom_point(data=cities, aes(x=lon, y=lat), shape=16,  size=3) +
       xlab("") + ylab("") +
@@ -1649,8 +1643,8 @@ LGAMaps_GH <- function(plantMonth, cities, lgaGroups, LGApoints, stateLabel, tex
     geom_sf(aes(fill=dY), col="darkgrey") +
     
     scale_fill_manual(values = Ydcols, guide = guide_legend(reverse=TRUE))+
-    geom_path(data=crop_ngstate, aes(x=long, y=lat, group=group), size=0.5) +
-    geom_path(data=AOIMapS, aes(x=long, y=lat, group=group), size=1, col="darkgrey") +
+    geom_sf(data=crop_ngstate, fill=NA, linewidth=0.5) +
+    geom_sf(data=AOIMapS, fill=NA, linewidth=1, col="darkgrey") +
     geom_text_repel(data=LGAnames, aes(long, lat, label=DISTRICT, fontface=1, angle=textangle), size=4, segment.size = NA) + 
     #geom_text(data=LGAnames, aes(long, lat, label=LGA, fontface=1, angle=textangle), size=2.5)+
     #geom_text_repel(data=LGAnames, aes(long, lat, label=LGA, fontface=1, angle=textangle), size=3) + 

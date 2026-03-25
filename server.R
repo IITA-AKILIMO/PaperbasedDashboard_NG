@@ -9,28 +9,21 @@ library(tidyr)
 require(plyr)
 library(sf)
 library(raster)
-library(dismo)
-library(maptools)
-library(rgeos)
 require(RColorBrewer)
 require(graphics)
 require(rasterVis)
-library(sp)
 library(shinyalert)
 library(ggthemes)
 require(ggplot2)
-library(gridExtra) 
+library(gridExtra)
 library(hexbin)
 library(viridis)
-library(sf)
 library(ggspatial)
 require(ggrepel)
 library(shiny)
 library(shinyWidgets)
 library(shinythemes)
 library(plotly)
-library(sf)
-library(raster)
 library(dplyr)
 library(spData)
 library(tmap)
@@ -536,14 +529,14 @@ server = function(input, output, session) {
 #######################################################################################
 
   
-  TownsNG <- st_read(dsn = ".", layer = "Places_towns", quiet = TRUE)
+  TownsNG <- st_read(dsn = ".", layer = "Places_towns")
   
-  RiversNG <- st_read(dsn = ".", layer = "Rivers", quiet = TRUE)
+  RiversNG <- st_read(dsn = ".", layer = "Rivers")
       
-  boundaryNG <- st_read(dsn=getwd(), layer="gadm36_NGA_1", quiet = TRUE)
+  boundaryNG <- st_read(dsn=getwd(), layer="gadm36_NGA_1")
       
        
-  ngstate <- st_read(dsn=getwd(), layer="gadm36_NGA_2", quiet = TRUE)
+  ngstate <- st_read(dsn=getwd(), layer="gadm36_NGA_2")
       
       
       ###################################################################################################
@@ -901,17 +894,16 @@ server = function(input, output, session) {
       
       AOIMap <- subset(ngstate, NAME_1 %in% AOI )
       AOIMap <- AOIMap[,c("NAME_1", "NAME_2")]
-      LGAnames <- as.data.frame(AOIMap)
-      LGAnames <- cbind(LGAnames, coordinates(AOIMap))
+      LGAnames <- as.data.frame(sf::st_drop_geometry(AOIMap))
+      LGAnames <- cbind(LGAnames, sf::st_coordinates(sf::st_centroid(sf::st_geometry(AOIMap))))
       colnames(LGAnames) <- c("STATE","LGA","long","lat"  )
       LGAnames <- LGAnames[!LGAnames$LGA %in% c("IbadanNorth-West","IbadanNorth-East","IbadanSouth-West", "IbadanSouth-East"),]
       LGAnames$LGA <- gsub("Egbado /", "", LGAnames$LGA )
       
       
       crop_ngstate <- subset(ngstate, NAME_1 %in% AOI )
-      towns <- as.data.frame(TownsNG)
-      towns <- towns[towns$name %in% cities & towns$fclass %in% c("town", "city"),]
-      crop_RiversNG <-  crop(RiversNG, extent(crop_ngstate))
+      towns <- TownsNG[TownsNG$name %in% cities & TownsNG$fclass %in% c("town", "city"),]
+      crop_RiversNG <- sf::st_crop(RiversNG, sf::st_bbox(crop_ngstate))
       crop_RiversNG <- crop_RiversNG[crop_RiversNG$fclass == "river", ]
       
       
@@ -1397,13 +1389,13 @@ server = function(input, output, session) {
         ggUrea <- ggplot(AOIMap3) +
           geom_sf(aes(fill=Urea), col="grey30") +
           scale_fill_manual(values = ureacols, guide = guide_legend(reverse=TRUE))+
-          geom_path(data=crop_ngstate, aes(x=long, y=lat, group=group), size=0.5) +
-          geom_path(data=AOIMapS, aes(x=long, y=lat, group=group), size=1, col="darkgrey") +
+          geom_sf(data=crop_ngstate, fill=NA, linewidth=0.5) +
+          geom_sf(data=AOIMapS, fill=NA, linewidth=1, col="darkgrey") +
           #geom_text(data=LGAnames, aes(long, lat, label=LGA, fontface=1, angle=textangle), size=3) +
           geom_text_repel(data=LGAnames, aes(long, lat, label=LGA, fontface=1, angle=textangle), size=3, segment.size = NA) + 
           geom_text(data=stateLabel, aes(lon, lat, label=state, fontface=2), col='black', size=6)+
-          geom_path(data=crop_RiversNG, aes(x=long, y=lat, group=group), color="dodgerblue1", size=0.3) +
-          geom_point(data=towns, aes(x=coords.x1, y=coords.x2), shape=16,  size=3) +
+          geom_sf(data=crop_RiversNG, color="dodgerblue1", linewidth=0.3) +
+          geom_sf(data=towns, shape=16, size=3) +
           annotation_scale(location = "br", width_hint = 0.3, line_width = 0.4) +
           annotation_north_arrow(location = "br", which_north = "true", pad_x = unit(0.2, "in"), pad_y = unit(0.2, "in"),
                                  style = north_arrow_fancy_orienteering) +
@@ -1441,13 +1433,13 @@ server = function(input, output, session) {
         ggNPK <- ggplot(AOIMap3) +
           geom_sf(aes(fill=NPK15_15_15), col="grey30") +
           scale_fill_manual(values = NPKcols, guide = guide_legend(reverse=TRUE))+
-          geom_path(data=crop_ngstate, aes(x=long, y=lat, group=group), size=0.5) +
-          geom_path(data=AOIMapS, aes(x=long, y=lat, group=group), size=1, col="darkgrey") +
+          geom_sf(data=crop_ngstate, fill=NA, linewidth=0.5) +
+          geom_sf(data=AOIMapS, fill=NA, linewidth=1, col="darkgrey") +
           geom_text_repel(data=LGAnames, aes(long, lat, label=LGA, fontface=1, angle=textangle), size=3, segment.size = NA) + 
           # geom_text(data=LGAnames, aes(long, lat, label=LGA, fontface=1, angle=textangle), size=2.5)+
           #geom_text_repel(data=LGAnames, aes(long, lat, label=LGA, fontface=1, angle=textangle), size=3) + 
-          geom_path(data=crop_RiversNG, aes(x=long, y=lat, group=group), color="dodgerblue1", size=0.3) +
-          geom_point(data=towns, aes(x=coords.x1, y=coords.x2), shape=16,  size=3) +
+          geom_sf(data=crop_RiversNG, color="dodgerblue1", linewidth=0.3) +
+          geom_sf(data=towns, shape=16, size=3) +
           xlab("") + ylab("") +
           ggtitle(tt) +
           theme_bw() +
@@ -1478,13 +1470,13 @@ server = function(input, output, session) {
         ggYield <- ggplot(AOIMap3) +
           geom_sf(aes(fill=dY), col="grey30") +
           scale_fill_manual(values = Ydcols, guide = guide_legend(reverse=TRUE))+
-          geom_path(data=crop_ngstate, aes(x=long, y=lat, group=group), size=0.5) +
-          geom_path(data=AOIMapS, aes(x=long, y=lat, group=group), size=1, col="darkgrey") +
+          geom_sf(data=crop_ngstate, fill=NA, linewidth=0.5) +
+          geom_sf(data=AOIMapS, fill=NA, linewidth=1, col="darkgrey") +
           geom_text_repel(data=LGAnames, aes(long, lat, label=LGA, fontface=1, angle=textangle), size=3, segment.size = NA) + 
           #geom_text(data=LGAnames, aes(long, lat, label=LGA, fontface=1, angle=textangle), size=2.5)+
           #geom_text_repel(data=LGAnames, aes(long, lat, label=LGA, fontface=1, angle=textangle), size=3) + 
-          geom_path(data=crop_RiversNG, aes(x=long, y=lat, group=group), color="dodgerblue1", size=0.3) +
-          geom_point(data=towns, aes(x=coords.x1, y=coords.x2), shape=16,  size=3) +
+          geom_sf(data=crop_RiversNG, color="dodgerblue1", linewidth=0.3) +
+          geom_sf(data=towns, shape=16, size=3) +
           xlab("") + ylab("") +
           ggtitle(tt) +
           theme_bw() +
@@ -1498,7 +1490,7 @@ server = function(input, output, session) {
         pdf(fileName, onefile = TRUE, height = 14, width=12)
         #pdf.options(paper = "a4")
         grid.newpage()
-        pushViewport(viewport(layout = grid.layout(3, 2, heights = unit(c(0.8, 5, 5,0.8), "null"))))   
+        pushViewport(viewport(layout = grid.layout(3, 2, heights = unit(c(0.8, 5, 5), "null"))))   
         grid.text(paste("Planting in", plantMonth, "at", yield_level,  sep=" "), vp = viewport(layout.pos.row = 1, layout.pos.col = 1:2))
         print(ggUrea, vp = viewport(layout.pos.row = 2, layout.pos.col = 1))         
         print(ggNPK, vp = viewport(layout.pos.row = 2, layout.pos.col = 2))

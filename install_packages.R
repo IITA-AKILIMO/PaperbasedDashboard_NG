@@ -20,7 +20,8 @@ core_packages <- c(
   "dplyr",
   "tidyr",
   "ggplot2",
-  "plotly"
+  "plotly",
+  "qpdf"
 )
 
 # GIS/Spatial packages

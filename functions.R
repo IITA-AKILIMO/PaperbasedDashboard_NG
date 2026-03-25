@@ -21,8 +21,8 @@ LGAMaps <- function(plantMonth, cities, lgaGroups, LGApoints, stateLabel, textan
   
   AOIMap <- subset(ngstate, NAME_1 %in% AOI )
   AOIMap <- AOIMap[,c("NAME_1", "NAME_2")]
-  LGAnames <- as.data.frame(AOIMap)
-  LGAnames <- cbind(LGAnames, coordinates(AOIMap))
+  LGAnames <- as.data.frame(sf::st_drop_geometry(AOIMap))
+  LGAnames <- cbind(LGAnames, sf::st_coordinates(sf::st_centroid(sf::st_geometry(AOIMap))))
   colnames(LGAnames) <- c("STATE","LGA","long","lat"  )
   LGAnames <- LGAnames[!LGAnames$LGA %in% c("IbadanNorth-West","IbadanNorth-East","IbadanSouth-West", "IbadanSouth-East"),]
   LGAnames$LGA <- gsub("Egbado /", "", LGAnames$LGA )
@@ -31,7 +31,7 @@ LGAMaps <- function(plantMonth, cities, lgaGroups, LGApoints, stateLabel, textan
   crop_ngstate <- subset(ngstate, NAME_1 %in% AOI )
   towns <- as.data.frame(TownsNG)
   towns <- towns[towns$name %in% cities & towns$fclass %in% c("town", "city"),]
-  crop_RiversNG <-  crop(RiversNG, extent(crop_ngstate))
+  crop_RiversNG <- sf::st_crop(RiversNG, sf::st_bbox(crop_ngstate))
   crop_RiversNG <- crop_RiversNG[crop_RiversNG$fclass == "river", ]
   
   
