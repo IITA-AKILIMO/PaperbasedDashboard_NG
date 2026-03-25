@@ -5,6 +5,7 @@
 
 # RStudio
 .Rproj.user/
+*.Rproj
 
 # Shiny
 *.rds
@@ -16,6 +17,9 @@ Thumbs.db
 
 # Logs
 *.log
+
+# Generated docs
+CLAUDE.html
 
 # Data files that shouldn't be tracked
 *.csv
