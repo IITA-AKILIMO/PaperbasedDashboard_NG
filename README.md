@@ -1,4 +1,4 @@
-# AKILIMO Paper Based Dashboard
+# AKILIMO Paper Based Dashboard NG
 
 Agricultural decision support tool for cassava farmers in Nigeria, Tanzania, Rwanda, and Ghana. Developed by IITA (International Institute of Tropical Agriculture).
 
