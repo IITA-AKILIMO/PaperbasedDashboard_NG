@@ -8,6 +8,10 @@
 # Use Cairo for off-screen rendering on headless servers (no X11 display)
 options(bitmapType = "cairo")
 
+# Redirect the automatic Rplots.pdf fallback device to tempdir so it doesn't
+# fail when the app working directory isn't writable on the server
+options(device = function(...) pdf(file.path(tempdir(), "Rplots.pdf"), ...))
+
 # Interactive (leaflet) mode — matches tmapOutput() used in ui.R and avoids
 # grid device font conflicts in tmap v4 static rendering
 tmap_mode("view")
