@@ -867,11 +867,11 @@ server = function(input, output, session) {
         textangle <- 0 
         couple  <-  "One"
         
-      }else if(lgaGroups == "Kogi"){ 
+      }else if(lgaGroups == "Kogi"){
         cities = "Kogi"
-        LGApoints  <-  Taraba
-        stateLabel  <-  Tarabalabel
-        textangle <- 0 
+        LGApoints  <-  Kogi
+        stateLabel  <-  Kogilabel
+        textangle <- 0
         couple  <-  "One"
         
       }else if(lgaGroups == "Kwara"){
@@ -958,6 +958,16 @@ server = function(input, output, session) {
       }
       
       AOIMap2 <- merge(AOIMap, unique(plotData[, c("LGA", "Urea", "NPK15_15_15","dY", "LGAdY")]),by.x="NAME_2" ,by.y="LGA")
+
+      if (nrow(AOIMap2) == 0) {
+        showNotification(
+          paste("No recommendation data found for", lgaGroups2, "in", plantMonth,
+                "at the selected yield level. Please try a different combination."),
+          type = "error", duration = 8
+        )
+        return()
+      }
+
       AOIMap2$month <- plantMonth
       AOIMap2 <- AOIMap2[!is.na(AOIMap2$Urea), ]
       plotData$month <- plantMonth
