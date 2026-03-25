@@ -297,9 +297,7 @@ joinPdfs <- function(country, adminName, FCYName, unit){
 ############################################################################################################
 ## NG: read data
 ############################################################################################################
-#setwd("D:/ACAI_Wrapper/cloud_compute/SP")
-setwd("C:/Users/User/Documents/ACAI/paper based/PaperbasedDashboard_GH")
-WLY_CY_FCY1_LGA <- readRDS("WLY_CY_fcy1_NG_2020_FW_everypoint.RDS")
+WLY_CY_FCY1_LGA <- readRDS("data/sp/ng/WLY_CY_fcy1_NG_2020_FW_everypoint.RDS")
 
 ############################################################################################################
 ##  NG: add week nrs
@@ -377,8 +375,7 @@ for (AN in unique(CY_WLY_coord$NAME_1)){
 ############################################################################################################
 ## TZ: read data
 ############################################################################################################
-setwd("D:/ACAI_Wrapper/cloud_compute/SP/TZ")
-WLY_CY_FCY1_Region <- readRDS("WLY_CY_FCY1_Region_2020_Average.RDS")
+WLY_CY_FCY1_Region <- readRDS("data/sp/ng/WLY_CY_FCY1_Region_2020_Average.RDS")
 head(WLY_CY_FCY1_Region)
 
 unique(WLY_CY_FCY1_Region$NAME_1)

@@ -4,36 +4,36 @@
 ## Read the GIS layers
 #######################################################################################
 
-TownsNG <- st_read(dsn = ".", layer = "Places_towns")
-RiversNG <- st_read(dsn = ".", layer = "Rivers")
+TownsNG <- st_read(dsn = "data/gis/ng", layer = "Places_towns")
+RiversNG <- st_read(dsn = "data/gis/ng", layer = "Rivers")
 
 
-boundaryNG <- st_read(dsn=getwd(), layer="gadm36_NGA_1")
-ngstate <- st_read(dsn=getwd(), layer="gadm36_NGA_2")
+boundaryNG <- st_read(dsn = "data/gis/ng", layer = "gadm36_NGA_1")
+ngstate    <- st_read(dsn = "data/gis/ng", layer = "gadm36_NGA_2")
 
 
-boundaryTZ <- st_read(dsn=getwd(), layer="gadm36_TZA_1")
-tzRegion <- st_read(dsn=getwd(), layer="gadm36_TZA_2")
+boundaryTZ <- st_read(dsn = "data/gis/tz", layer = "gadm36_TZA_1")
+tzRegion   <- st_read(dsn = "data/gis/tz", layer = "gadm36_TZA_2")
 
 
 ###################################################################################################
 ## NG fertilizer recom for FCY 1:5
 ###################################################################################################
-FR_NG_FCY1 <- readRDS("FRrecom_lga_level1_NG_2020.RDS")
-FR_NG_FCY2 <- readRDS("FRrecom_lga_level2_NG_2020.RDS")
-FR_NG_FCY3 <- readRDS("FRrecom_lga_level3_NG_2020.RDS")
-FR_NG_FCY4 <- readRDS("FRrecom_lga_level4_NG_2020.RDS")
-FR_NG_FCY5 <- readRDS("FRrecom_lga_level5_NG_2020.RDS")
+FR_NG_FCY1 <- readRDS("data/fr/ng/FRrecom_lga_level1_NG_2020.RDS")
+FR_NG_FCY2 <- readRDS("data/fr/ng/FRrecom_lga_level2_NG_2020.RDS")
+FR_NG_FCY3 <- readRDS("data/fr/ng/FRrecom_lga_level3_NG_2020.RDS")
+FR_NG_FCY4 <- readRDS("data/fr/ng/FRrecom_lga_level4_NG_2020.RDS")
+FR_NG_FCY5 <- readRDS("data/fr/ng/FRrecom_lga_level5_NG_2020.RDS")
 
 
 ###########################################################################
 ##  TZ fertilizer recom for FCY 1:5
 ###########################################################################
-FR_TZ_FCY1 <- readRDS("FRrecom_lga_level1_TZ_2020.RDS")
-FR_TZ_FCY2 <- readRDS("FRrecom_lga_level2_TZ_2020.RDS")
-FR_TZ_FCY3 <- readRDS("FRrecom_lga_level3_TZ_2020.RDS")
-FR_TZ_FCY4 <- readRDS("FRrecom_lga_level4_TZ_2020.RDS")
-FR_TZ_FCY5 <- readRDS("FRrecom_lga_level5_TZ_2020.RDS")
+FR_TZ_FCY1 <- readRDS("data/fr/tz/FRrecom_lga_level1_TZ_2020.RDS")
+FR_TZ_FCY2 <- readRDS("data/fr/tz/FRrecom_lga_level2_TZ_2020.RDS")
+FR_TZ_FCY3 <- readRDS("data/fr/tz/FRrecom_lga_level3_TZ_2020.RDS")
+FR_TZ_FCY4 <- readRDS("data/fr/tz/FRrecom_lga_level4_TZ_2020.RDS")
+FR_TZ_FCY5 <- readRDS("data/fr/tz/FRrecom_lga_level5_TZ_2020.RDS")
 
 
 ###########################################################################

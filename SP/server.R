@@ -42,57 +42,53 @@ library(DT)
 #######################################################################################
 
 
-TownsNG <- st_read(dsn = ".", layer = "Places_towns")
+TownsNG <- st_read(dsn = "data/gis/ng", layer = "Places_towns")
 
-RiversNG <- st_read(dsn = ".", layer = "Rivers")
-
-
-boundaryNG <- st_read(dsn=getwd(), layer="gadm36_NGA_1")
+RiversNG <- st_read(dsn = "data/gis/ng", layer = "Rivers")
 
 
-ngstate <- st_read(dsn=getwd(), layer="gadm36_NGA_2")
+boundaryNG <- st_read(dsn = "data/gis/ng", layer = "gadm36_NGA_1")
+
+ngstate    <- st_read(dsn = "data/gis/ng", layer = "gadm36_NGA_2")
 
 
-boundaryTZ <- st_read(dsn=getwd(), layer="gadm36_TZA_1")
+boundaryTZ <- st_read(dsn = "data/gis/tz", layer = "gadm36_TZA_1")
 
+tzRegion   <- st_read(dsn = "data/gis/tz", layer = "gadm36_TZA_2")
 
-tzRegion <- st_read(dsn=getwd(), layer="gadm36_TZA_2")
+boundaryRW <- st_read(dsn = "data/gis/rw", layer = "gadm36_RWA_1")
 
-boundaryRW <- st_read(dsn=getwd(), layer="gadm36_RWA_1")
+rwState    <- st_read(dsn = "data/gis/rw", layer = "gadm36_RWA_2")
 
+boundaryGH <- st_read(dsn = "data/gis/gh", layer = "gadm36_GHA_1")
 
-rwState <- st_read(dsn=getwd(), layer="gadm36_RWA_2")
-
-boundaryGH <- st_read(dsn=getwd(), layer="gadm36_GHA_1")
-
-
-ghRegions <- st_read(dsn=getwd(), layer="gadm36_GHA_2")
+ghRegions  <- st_read(dsn = "data/gis/gh", layer = "gadm36_GHA_2")
 
 
 ###################################################################################################
 ## NG fertilizer recom for FCY 1:5
 ###################################################################################################
-FR_NG_FCY1 <- readRDS("FRrecom_lga_level1_NG_2020.RDS")
-FR_NG_FCY2 <- readRDS("FRrecom_lga_level2_NG_2020.RDS")
-FR_NG_FCY3 <- readRDS("FRrecom_lga_level3_NG_2020.RDS")
-FR_NG_FCY4 <- readRDS("FRrecom_lga_level4_NG_2020.RDS")
-FR_NG_FCY5 <- readRDS("FRrecom_lga_level5_NG_2020.RDS")
+FR_NG_FCY1 <- readRDS("data/fr/ng/FRrecom_lga_level1_NG_2020.RDS")
+FR_NG_FCY2 <- readRDS("data/fr/ng/FRrecom_lga_level2_NG_2020.RDS")
+FR_NG_FCY3 <- readRDS("data/fr/ng/FRrecom_lga_level3_NG_2020.RDS")
+FR_NG_FCY4 <- readRDS("data/fr/ng/FRrecom_lga_level4_NG_2020.RDS")
+FR_NG_FCY5 <- readRDS("data/fr/ng/FRrecom_lga_level5_NG_2020.RDS")
 
 
 ###########################################################################
 ##  TZ fertilizer recom for FCY 1:5
 ###########################################################################
-FR_TZ_FCY1 <- readRDS("FRrecom_lga_level1_TZ_2020.RDS")
-FR_TZ_FCY2 <- readRDS("FRrecom_lga_level2_TZ_2020.RDS")
-FR_TZ_FCY3 <- readRDS("FRrecom_lga_level3_TZ_2020.RDS")
-FR_TZ_FCY4 <- readRDS("FRrecom_lga_level4_TZ_2020.RDS")
-FR_TZ_FCY5 <- readRDS("FRrecom_lga_level5_TZ_2020.RDS")
+FR_TZ_FCY1 <- readRDS("data/fr/tz/FRrecom_lga_level1_TZ_2020.RDS")
+FR_TZ_FCY2 <- readRDS("data/fr/tz/FRrecom_lga_level2_TZ_2020.RDS")
+FR_TZ_FCY3 <- readRDS("data/fr/tz/FRrecom_lga_level3_TZ_2020.RDS")
+FR_TZ_FCY4 <- readRDS("data/fr/tz/FRrecom_lga_level4_TZ_2020.RDS")
+FR_TZ_FCY5 <- readRDS("data/fr/tz/FRrecom_lga_level5_TZ_2020.RDS")
 
 
 ###########################################################################
 ## RW fertilizer recom for FCY 1:5
 ###########################################################################
-SP_FCY <- readRDS("Ghana_SP_annexData.RDS")
+SP_FCY <- readRDS("data/sp/gh/Ghana_SP_annexData.RDS")
 SP_FCY_FCY1 <- SP_FCY[SP_FCY$FCY == "level1", ]
 FR_RW_FCY2 <- FR_RW_FCY[FR_RW_FCY$FCY == "level2", ]
 FR_RW_FCY3 <- FR_RW_FCY[FR_RW_FCY$FCY == "level3", ]
@@ -104,7 +100,7 @@ FR_RW_FCY5 <- FR_RW_FCY[FR_RW_FCY$FCY == "level5", ]
 ## GH fertilizer recom for FCY 1:5
 ###########################################################################
 
-FR_GH_FCY <- readRDS("GH_FR_CassavaPaperBased.RDS")
+FR_GH_FCY <- readRDS("data/fr/gh/GH_FR_CassavaPaperBased.RDS")
 FR_GH_FCY1 <- FR_GH_FCY[FR_GH_FCY$FCY == "level1", ]
 FR_GH_FCY2 <- FR_GH_FCY[FR_GH_FCY$FCY == "level2", ]
 FR_GH_FCY3 <- FR_GH_FCY[FR_GH_FCY$FCY == "level3", ]

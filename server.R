@@ -529,24 +529,23 @@ server = function(input, output, session) {
 #######################################################################################
 
   
-  TownsNG <- st_read(dsn = ".", layer = "Places_towns")
-  
-  RiversNG <- st_read(dsn = ".", layer = "Rivers")
-      
-  boundaryNG <- st_read(dsn=getwd(), layer="gadm36_NGA_1")
-      
-       
-  ngstate <- st_read(dsn=getwd(), layer="gadm36_NGA_2")
-      
-      
+  TownsNG <- st_read(dsn = "data/gis/ng", layer = "Places_towns")
+
+  RiversNG <- st_read(dsn = "data/gis/ng", layer = "Rivers")
+
+  boundaryNG <- st_read(dsn = "data/gis/ng", layer = "gadm36_NGA_1")
+
+  ngstate    <- st_read(dsn = "data/gis/ng", layer = "gadm36_NGA_2")
+
+
       ###################################################################################################
       ## NG fertilizer recom for FCY 1:5
       ###################################################################################################
-      FR_NG_FCY1 <- readRDS("FRrecom_lga_level1_NG_2020.RDS")
-      FR_NG_FCY2 <- readRDS("FRrecom_lga_level2_NG_2020.RDS")
-      FR_NG_FCY3 <- readRDS("FRrecom_lga_level3_NG_2020.RDS")
-      FR_NG_FCY4 <- readRDS("FRrecom_lga_level4_NG_2020.RDS")
-      FR_NG_FCY5 <- readRDS("FRrecom_lga_level5_NG_2020.RDS")
+      FR_NG_FCY1 <- readRDS("data/fr/ng/FRrecom_lga_level1_NG_2020.RDS")
+      FR_NG_FCY2 <- readRDS("data/fr/ng/FRrecom_lga_level2_NG_2020.RDS")
+      FR_NG_FCY3 <- readRDS("data/fr/ng/FRrecom_lga_level3_NG_2020.RDS")
+      FR_NG_FCY4 <- readRDS("data/fr/ng/FRrecom_lga_level4_NG_2020.RDS")
+      FR_NG_FCY5 <- readRDS("data/fr/ng/FRrecom_lga_level5_NG_2020.RDS")
       
    
       ###########################################################################
@@ -1587,7 +1586,7 @@ server = function(input, output, session) {
     observeEvent(input$ok, {
     if(input$use == "Scheduled Planting"){
   
-      CY_WLY_coord <- readRDS("CY_WLY_coord.RDS") 
+      CY_WLY_coord <- readRDS("data/sp/ng/CY_WLY_coord.RDS")
       
           removeModal()
       #test parameters     

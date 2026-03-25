@@ -21,14 +21,14 @@ require(qpdf)
 ## Read the GIS layers
 #######################################################################################
 
-TownsNG <- st_read(dsn = ".", layer = "Places_towns")
-RiversNG <- st_read(dsn = ".", layer = "Rivers")
+TownsNG <- st_read(dsn = "data/gis/ng", layer = "Places_towns")
+RiversNG <- st_read(dsn = "data/gis/ng", layer = "Rivers")
 
-boundaryNG <- st_read(dsn=getwd(), layer="gadm36_NGA_1")
-ngstate <- st_read(dsn=getwd(), layer="gadm36_NGA_2")
+boundaryNG <- st_read(dsn = "data/gis/ng", layer = "gadm36_NGA_1")
+ngstate    <- st_read(dsn = "data/gis/ng", layer = "gadm36_NGA_2")
 
-boundaryTZ <- st_read(dsn=getwd(), layer="gadm36_TZA_1")
-tzRegion <- st_read(dsn=getwd(), layer="gadm36_TZA_2")
+boundaryTZ <- st_read(dsn = "data/gis/tz", layer = "gadm36_TZA_1")
+tzRegion   <- st_read(dsn = "data/gis/tz", layer = "gadm36_TZA_2")
 
 
 
@@ -36,28 +36,28 @@ tzRegion <- st_read(dsn=getwd(), layer="gadm36_TZA_2")
 ###################################################################################################
 ## NG fertilizer recom for FCY 1:5
 ###################################################################################################
-FR_NG_FCY1 <- readRDS("FRrecom_lga_level1_NG_2020.RDS")
-FR_NG_FCY2 <- readRDS("FRrecom_lga_level2_NG_2020.RDS")
-FR_NG_FCY3 <- readRDS("FRrecom_lga_level3_NG_2020.RDS")
-FR_NG_FCY4 <- readRDS("FRrecom_lga_level4_NG_2020.RDS")
-FR_NG_FCY5 <- readRDS("FRrecom_lga_level5_NG_2020.RDS")
+FR_NG_FCY1 <- readRDS("data/fr/ng/FRrecom_lga_level1_NG_2020.RDS")
+FR_NG_FCY2 <- readRDS("data/fr/ng/FRrecom_lga_level2_NG_2020.RDS")
+FR_NG_FCY3 <- readRDS("data/fr/ng/FRrecom_lga_level3_NG_2020.RDS")
+FR_NG_FCY4 <- readRDS("data/fr/ng/FRrecom_lga_level4_NG_2020.RDS")
+FR_NG_FCY5 <- readRDS("data/fr/ng/FRrecom_lga_level5_NG_2020.RDS")
 
 
 
 ###########################################################################
 ##  TZ fertilizer recom for FCY 1:5
 ###########################################################################
-FR_TZ_FCY1 <- readRDS("FRrecom_lga_level1_TZ_2020.RDS")
-FR_TZ_FCY2 <- readRDS("FRrecom_lga_level2_TZ_2020.RDS")
-FR_TZ_FCY3 <- readRDS("FRrecom_lga_level3_TZ_2020.RDS")
-FR_TZ_FCY4 <- readRDS("FRrecom_lga_level4_TZ_2020.RDS")
-FR_TZ_FCY5 <- readRDS("FRrecom_lga_level5_TZ_2020.RDS")
+FR_TZ_FCY1 <- readRDS("data/fr/tz/FRrecom_lga_level1_TZ_2020.RDS")
+FR_TZ_FCY2 <- readRDS("data/fr/tz/FRrecom_lga_level2_TZ_2020.RDS")
+FR_TZ_FCY3 <- readRDS("data/fr/tz/FRrecom_lga_level3_TZ_2020.RDS")
+FR_TZ_FCY4 <- readRDS("data/fr/tz/FRrecom_lga_level4_TZ_2020.RDS")
+FR_TZ_FCY5 <- readRDS("data/fr/tz/FRrecom_lga_level5_TZ_2020.RDS")
 
 
 ###########################################################################
 ##  Ghana fertilizer recom for FCY 1:5
 ###########################################################################
-FCY_FRData <- readRDS("GH_FR_CassavaPaperBased.RDS")
+FCY_FRData <- readRDS("data/fr/gh/GH_FR_CassavaPaperBased.RDS")
 
 FR_GH_FCY1 <- FCY_FRData[FCY_FRData$FCY == "level1", ]
 FR_GH_FCY2 <- FCY_FRData[FCY_FRData$FCY == "level2", ]
@@ -838,9 +838,8 @@ Zanzibarcity <- data.frame(REGION = "Zanzibar",name="Zanzibar", lat=-6.17, lon =
 ## TZ: mapping: for every Region, maps will be made per planting month and based on user selection for ha or acre
 ##############################################################################################################
 
-setwd("E:/QUEFTS/mtcGISData/Tanzania")
-boundaryTZ <- st_read(dsn=getwd(), layer="gadm36_TZA_1")
-tzRegion <- st_read(dsn=getwd(), layer="gadm36_TZA_2")
+boundaryTZ <- st_read(dsn = "data/gis/tz", layer = "gadm36_TZA_1")
+tzRegion   <- st_read(dsn = "data/gis/tz", layer = "gadm36_TZA_2")
 
 
 LGAMaps_TZ <- function(plantMonth, cities, lgaGroups, LGApoints, stateLabel, textangle, unit, couple){
@@ -1329,9 +1328,8 @@ Voltacity <- data.frame(REGION = c("Volta"),name=c("Ho"),
 ##############################################################################################################
 ## GH: mapping: for every Region, maps will be made per planting month and based on user selection for ha or acre
 ##############################################################################################################
-setwd("/home/akilimo/lintul/lintul/dataSources/GIS_layers")
-boundaryGH <- st_read(dsn=getwd(), layer="gha_admbnda_adm1_gss_20210308")
-ghRegion <- st_read(dsn=getwd(), layer="gha_admbnda_adm2_gss_20210308")
+boundaryGH <- st_read(dsn = "data/gis/gh", layer = "gha_admbnda_adm1_gss_20210308")
+ghRegion   <- st_read(dsn = "data/gis/gh", layer = "gha_admbnda_adm2_gss_20210308")
 
 
 
