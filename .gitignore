@@ -1,0 +1,23 @@
+# R
+.Rhistory
+.RData
+.Ruserdata
+
+# RStudio
+.Rproj.user/
+
+# Shiny
+*.rds
+*.rda
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+
+# Data files that shouldn't be tracked
+*.csv
+*.xlsx
+*.xls
