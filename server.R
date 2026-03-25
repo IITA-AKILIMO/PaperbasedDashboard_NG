@@ -8,6 +8,10 @@
 # Use Cairo for off-screen rendering on headless servers (no X11 display)
 options(bitmapType = "cairo")
 
+# Interactive (leaflet) mode — matches tmapOutput() used in ui.R and avoids
+# grid device font conflicts in tmap v4 static rendering
+tmap_mode("view")
+
 library(tidyr)
 require(plyr)
 library(sf)
