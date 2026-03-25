@@ -1,0 +1,48 @@
+# Linux container for AKILIMO PaperbasedDashboard_NG
+# Uses rocker/shiny — Shiny Server pre-configured, runs on any platform
+# via Docker Desktop (WSL2 backend on Windows, default Linux mode).
+#
+# Build: docker build -f Dockerfile.linux -t akilimo-dashboard .
+# Run:   docker run -p 3838:3838 akilimo-dashboard
+# App:   http://localhost:3838/dashboard/
+
+FROM rocker/shiny:4.4.2
+
+# ── System libraries ──────────────────────────────────────────────────────────
+# sf bundles its own GDAL/PROJ/GEOS on Windows; on Linux these must be present.
+# Cairo is needed for off-screen PNG rendering in Shiny (no X11 on server).
+RUN apt-get update && apt-get install -y --no-install-recommends \
+        libgdal-dev        `# sf / raster` \
+        libgeos-dev        `# sf` \
+        libproj-dev        `# sf / ggspatial` \
+        libssl-dev         `# httr / curl` \
+        libcurl4-openssl-dev \
+        libcairo2-dev      `# Cairo R package` \
+        libxt-dev          `# Cairo R package` \
+        libfontconfig1-dev \
+        libudunits2-dev    `# units / sf` \
+    && rm -rf /var/lib/apt/lists/*
+
+# ── App ───────────────────────────────────────────────────────────────────────
+# Shiny Server serves apps from /srv/shiny-server/<name>/
+ENV APP_DIR=/srv/shiny-server/dashboard
+
+COPY . ${APP_DIR}
+
+WORKDIR ${APP_DIR}
+
+# ── R packages ────────────────────────────────────────────────────────────────
+RUN Rscript install_packages.R
+
+# ── Data files ────────────────────────────────────────────────────────────────
+# Downloads from GitHub Release v1.0.0 into data/ subfolders.
+RUN Rscript setup_data.R
+
+# ── Runtime ───────────────────────────────────────────────────────────────────
+EXPOSE 3838
+
+HEALTHCHECK --interval=30s --timeout=10s --start-period=60s --retries=3 \
+    CMD curl -sf http://localhost:3838/dashboard/ || exit 1
+
+# rocker/shiny's /init starts Shiny Server with its default config
+CMD ["/init"]
