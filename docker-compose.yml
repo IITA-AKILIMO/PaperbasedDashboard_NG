@@ -1,0 +1,52 @@
+services:
+
+  # ── Linux container (recommended) ─────────────────────────────────────────
+  # Default service. Runs on any platform via Docker Desktop WSL2/Linux mode.
+  # Usage: docker compose up
+  dashboard:
+    build:
+      context: .
+      dockerfile: Dockerfile.linux
+    image: akilimo-dashboard:linux
+    container_name: akilimo-dashboard
+    ports:
+      - "3838:3838"
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-sf", "http://localhost:3838/dashboard/"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 60s
+    environment:
+      - SHINY_LOG_LEVEL=INFO
+    volumes:
+      # Persist downloaded data files across rebuilds
+      - dashboard-data:/srv/shiny-server/dashboard/data
+    labels:
+      com.akilimo.project: "PaperbasedDashboard_NG"
+      com.akilimo.platform: "linux"
+
+  # ── Windows container (optional) ──────────────────────────────────────────
+  # Only available when Docker Desktop is switched to Windows containers mode.
+  # Usage: docker compose --profile windows up dashboard-windows
+  dashboard-windows:
+    profiles:
+      - windows
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: akilimo-dashboard:windows
+    container_name: akilimo-dashboard-windows
+    ports:
+      - "3838:3838"
+    restart: unless-stopped
+    environment:
+      - SHINY_PORT=3838
+    labels:
+      com.akilimo.project: "PaperbasedDashboard_NG"
+      com.akilimo.platform: "windows"
+
+volumes:
+  dashboard-data:
+    driver: local
