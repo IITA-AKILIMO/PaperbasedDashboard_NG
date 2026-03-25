@@ -12,36 +12,23 @@ Agricultural decision support tool for cassava farmers in Nigeria, Tanzania, Rwa
 ### R Version
 - R 4.0 or higher recommended
 
-### Required R Packages
+### Install Packages
 
+**Option 1: Run the installation script (recommended)**
+```r
+# From R/RStudio
+source("install_packages.R")
+```
+
+**Option 2: Manual installation**
 ```r
 install.packages(c(
-  "shiny",
-  "shinydashboard",
-  "shinyWidgets",
-  "DT",
-  "dplyr",
-  "tidyr",
-  "ggplot2",
-  "plotly",
-  "sf",
-  "raster",
-  "tmap",
-  "leaflet",
-  "ggspatial",
-  "viridis",
-  "RColorBrewer",
-  "gridExtra",
-  "formattable",
-  "shinyalert",
-  "shinybusy",
-  "shinycssloaders",
-  "ggthemes",
-  "ggrepel",
-  "spData",
-  "cartogram",
-  "rasterVis",
-  "hexbin"
+  "shiny", "shinydashboard", "shinyWidgets", "DT",
+  "dplyr", "tidyr", "ggplot2", "plotly",
+  "sf", "raster", "tmap", "leaflet", "ggspatial", "spData", "cartogram", "rasterVis",
+  "viridis", "RColorBrewer", "gridExtra", "ggthemes", "ggrepel", "hexbin",
+  "formattable", "shinyalert", "shinybusy", "shinycssloaders", "shinyjs",
+  "plyr", "grid", "tools"
 ))
 ```
 
@@ -91,14 +78,15 @@ The application requires the following files in the working directory:
 
 ```
 PaperbasedDashboard_NG/
-├── server.R           # Main Shiny server
-├── ui.R               # Shiny UI definition
-├── functions.R        # Utility functions
-├── functionspp.R      # GIS processing functions
-├── SP_functions.R     # Scheduled Planting functions
-├── styles.css         # Custom styling
-├── README.md          # This file
-└── SP/                # Scheduled Planting submodule
+├── server.R              # Main Shiny server
+├── ui.R                  # Shiny UI definition
+├── functions.R           # Utility functions
+├── functionspp.R         # GIS processing functions
+├── SP_functions.R        # Scheduled Planting functions
+├── install_packages.R    # Package installation script
+├── styles.css            # Custom styling
+├── README.md             # This file
+└── SP/                   # Scheduled Planting submodule
 ```
 
 ## Development
