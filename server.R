@@ -865,7 +865,7 @@ server = function(input, output, session) {
         
       }else if(lgaGroups == "Ogun"){ 
         cities = "Abeokuta"
-        LGApoints == Ogun
+        LGApoints  <-  Ogun
         stateLabel  <-  Ogunlabel
         textangle <- 0 
         couple  <-  "One"
